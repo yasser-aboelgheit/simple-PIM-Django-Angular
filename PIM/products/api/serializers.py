@@ -8,23 +8,24 @@ from rest_framework.serializers import (
 
 from products.models import Category, Product
 
-# class SubCategorySerializer(ModelSerializer):
-#     class Meta:
-#         model = Category
-#         fields = ('name',)
+category_detail_url = HyperlinkedIdentityField(
+        view_name='category_detail',
+        lookup_field='slug'
+        )
 
 class CategoryListSerializer(ModelSerializer):
     subcategories = SerializerMethodField(
         read_only=True)
-
+    url = category_detail_url
     class Meta:
         model = Category
-        fields = ['id','name','slug','subcategories']
+        fields = ['id','name','slug','url','subcategories']
     
     def get_subcategories(self, obj):
         serializer = CategoryListSerializer(
             instance=obj.subcategories.all(),
-            many=True
+            many=True,
+            context=self.context
         )
         return serializer.data
 
@@ -43,6 +44,12 @@ class CategoryDetailSerializer(ModelSerializer):
             context=self.context
         )
         return serializer.data
+
+
+class CategoryUpdateCreateSerializer(ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
 
 
 product_detail_url = HyperlinkedIdentityField(

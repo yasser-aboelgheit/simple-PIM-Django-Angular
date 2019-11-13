@@ -16,6 +16,7 @@ from .serializers import (
     ProductUpdateCreateSerializer,
     CategoryListSerializer,
     CategoryDetailSerializer,
+    CategoryUpdateCreateSerializer,
     )
 
 
@@ -25,10 +26,21 @@ class CategoryListAPIView(ListAPIView):
     def get_queryset(self):
         return Category.objects.filter(parent_category__isnull=True)
 
-class CategoryDetailAPIView(RetrieveAPIView):
+class CategoryDetailAPIView(DestroyModelMixin, UpdateModelMixin, RetrieveAPIView):
     queryset = Category.objects.all()
     serializer_class = CategoryDetailSerializer 
     lookup_field = 'slug'
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+
+class CategoryCreateAPIView(CreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategoryUpdateCreateSerializer 
 
 class ProductListAPIView(ListAPIView):
     queryset = Product.objects.all()
