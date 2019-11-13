@@ -8,7 +8,7 @@ import { ApiService } from './api.service';
 })
 export class AppComponent {
   title = 'PIM-front';
-  categories = [{name:"computer"},{name:"mobile"}];
+  categories ;
   subcategories;
   cars = ["Saab", "Volvo", "BMW"];
   constructor(private api: ApiService) {
@@ -16,19 +16,8 @@ export class AppComponent {
   }
   getCategories = () => {
     this.api.getAllCategories().subscribe(
-      data => {
-        data[0].arg3=["ana","ana"]
-          
-        ;
+      data => {                  
         this.categories = data;
-        // console.log(data);
-        var i;
-        for (i = 0; i < Object.keys(data).length; i++) {
-          if(Object.keys(data[i]["subcategories"]).length!==0)
-          {
-          console.log(data[i]["subcategories"][i]["name"]);
-          }    
-        }
       },
       error => {
         console.log(error);
