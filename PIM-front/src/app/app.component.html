@@ -1,0 +1,9 @@
+<h1> Categories </h1>
+<ul>
+  <li *ngFor="let category of categories">
+    <h2 (click)="productClicked(category)">{{category.name}}</h2>
+    <p *ngFor="let subcategory of category.subcategories">
+    {{subcategory.name}}
+    </p>
+</ul>
+
